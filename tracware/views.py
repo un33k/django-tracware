@@ -1,11 +1,11 @@
 import json
+
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
-from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
-from django.template import RequestContext, loader
-from django.http import HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponseNotAllowed
+from django.http import HttpResponse
 from django.apps import apps
 
 from toolware.utils.mixin import LoginRequiredMixin
