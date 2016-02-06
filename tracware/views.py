@@ -39,7 +39,7 @@ class TracToggleAjaxView(LoginRequiredMixin, CsrfProtectMixin, TemplateView):
     """
     def invalid_access_method(self):
         messages.add_message(self.request, messages.WARNING, _("Invalid request. Method Not Allowed."))
-        return HttpResponseNotAllowed('Method Not Allowed')
+        return HttpResponseNotAllowed(_('Method Not Allowed'))
 
     def invalid_operation(self):
         json_data = {
