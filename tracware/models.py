@@ -1,12 +1,11 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.encoding import python_2_unicode_compatible
-from django.contrib.contenttypes import generic
-from django.contrib.auth import get_user_model
+from django.utils.translation import gettext as _
 
 from . import defaults as defs
-
-User = get_user_model()
 
 
 @python_2_unicode_compatible
@@ -27,10 +26,10 @@ class Trac(models.Model):
         (TRACWARE_TYPE_BOOKMARK, "Bookmark"),
     )
 
-    user = models.ForeignKey(User, related_name="%(class)s")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(class)s")
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = GenericRelation('content_type', 'object_id')
     trac_type = models.IntegerField(choices=TRACWARE_TYPE_OPTIONS)
 
     class Meta:

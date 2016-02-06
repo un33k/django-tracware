@@ -1,7 +1,7 @@
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
 
-from models import Trac
+from .models import Trac
 from . import defaults as defs
 
 

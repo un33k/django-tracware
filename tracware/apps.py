@@ -1,4 +1,6 @@
 from django.apps import apps
+from django.db.models import signals
+from django.utils.translation import gettext as _
 from django.apps import AppConfig as DjangoAppConfig
 
 
