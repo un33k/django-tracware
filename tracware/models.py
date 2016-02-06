@@ -1,10 +1,8 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.contenttypes import generic
 from django.contrib.auth import get_user_model
-from django.core.cache import cache
 
 from . import defaults as defs
 
