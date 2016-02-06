@@ -7,4 +7,5 @@ class IracTestCase(TestCase):
     """
     Trac Test
     """
-    assertEqual(1, 1)
+    def test_one(self):
+        self.assertEqual(1, 1)

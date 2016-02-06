@@ -5,5 +5,5 @@ DATABASES = {
     },
 }
 SECRET_KEY = "un33k"
-INSTALLED_APPS = ['trackware']
+INSTALLED_APPS = ['tracware']
 MIDDLEWARE_CLASSES = []

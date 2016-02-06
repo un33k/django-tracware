@@ -7,10 +7,10 @@ import os
 import sys
 
 
-name = 'django-trackware'
-package = 'trackware'
+name = 'django-tracware'
+package = 'tracware'
 description = "A Django application for tracking objects of all types"
-url = 'https://github.com/un33k/django-trackware'
+url = 'https://github.com/un33k/django-tracware'
 author = 'Val Neekman'
 author_email = 'info@neekware.com'
 license = 'BSD'

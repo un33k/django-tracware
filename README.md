@@ -18,14 +18,14 @@ Overview
 How to install
 ====================
 
-    1. easy_install django-trackware
-    2. pip install django-trackware
-    3. git clone http://github.com/un33k/django-trackware
-        a. cd django-trackware
+    1. easy_install django-tracware
+    2. pip install django-tracware
+    3. git clone http://github.com/un33k/django-tracware
+        a. cd django-tracware
         b. run python setup.py
-    4. wget https://github.com/un33k/django-trackware/zipball/master
+    4. wget https://github.com/un33k/django-tracware/zipball/master
         a. unzip the downloaded file
-        b. cd into django-trackware-* directory
+        b. cd into django-tracware-* directory
         c. run python setup.py
 
 
@@ -63,14 +63,14 @@ X.Y.Z Version
     `MINOR` version -- when you add functionality in a backwards-compatible manner, and
     `PATCH` version -- when you make backwards-compatible bug fixes.
 
-[status-image]: https://secure.travis-ci.org/un33k/django-trackware.png?branch=master
-[status-link]: http://travis-ci.org/un33k/django-trackware?branch=master
+[status-image]: https://secure.travis-ci.org/un33k/django-tracware.png?branch=master
+[status-link]: http://travis-ci.org/un33k/django-tracware?branch=master
 
-[version-image]: https://img.shields.io/pypi/v/django-trackware.svg
-[version-link]: https://pypi.python.org/pypi/django-trackware
+[version-image]: https://img.shields.io/pypi/v/django-tracware.svg
+[version-link]: https://pypi.python.org/pypi/django-tracware
 
-[coverage-image]: https://coveralls.io/repos/un33k/django-trackware/badge.svg
-[coverage-link]: https://coveralls.io/r/un33k/django-trackware
+[coverage-image]: https://coveralls.io/repos/un33k/django-tracware/badge.svg
+[coverage-link]: https://coveralls.io/r/un33k/django-tracware
 
-[download-image]: https://img.shields.io/pypi/dm/django-trackware.svg
-[download-link]: https://pypi.python.org/pypi/django-trackware
+[download-image]: https://img.shields.io/pypi/dm/django-tracware.svg
+[download-link]: https://pypi.python.org/pypi/django-tracware
