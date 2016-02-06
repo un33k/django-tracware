@@ -6,8 +6,9 @@ from . import defaults as defs
 
 
 def trac_get_type_id_by_name(trac_type_name):
-    """ Returns a numeric version of a trac type """
-
+    """
+    Returns a numeric version of a trac type.
+    """
     for t in Trac.TRACWARE_TYPE_OPTIONS:
         if trac_type_name.lower() == t[1].lower():
             return t[0]
@@ -15,8 +16,9 @@ def trac_get_type_id_by_name(trac_type_name):
 
 
 def trac_get_type_name_by_id(trac_type_id):
-    """ Returns a string version of a trac type """
-
+    """
+    Returns a string version of a trac type.
+    """
     for t in Trac.TRACWARE_TYPE_OPTIONS:
         if trac_type_id == t[0]:
             return t[1]
@@ -24,8 +26,9 @@ def trac_get_type_name_by_id(trac_type_id):
 
 
 def trac_get_cache_key(uid, oid, cid, tid):
-    """ Build a cache key for trac """
-
+    """
+    Build a cache key for trac.
+    """
     trac_key_token = [
         'trac',
         Site.objects.get_current().domain,
@@ -39,8 +42,9 @@ def trac_get_cache_key(uid, oid, cid, tid):
 
 
 def trac_exists(user, obj, trac_type):
-    """ True if Trac exists """
-
+    """
+    True if Trac exists.
+    """
     trac = trac_get_trac_for_user(user, obj, trac_type)
     if not trac:
         return False
@@ -48,8 +52,9 @@ def trac_exists(user, obj, trac_type):
 
 
 def trac_get_tracs_for_model(model, user=None, trac_type=None):
-    """ Returns tracs for a specific model """
-
+    """
+    Returns tracs for a specific model.
+    """
     content_type = ContentType.objects.get_for_model(model)
     qs = Trac.objects.filter(content_type=content_type)
     if user:
@@ -60,8 +65,9 @@ def trac_get_tracs_for_model(model, user=None, trac_type=None):
 
 
 def trac_get_tracs_for_object(obj, user=None, trac_type=None):
-    """ Returns tracs for a specific object """
-
+    """
+    Returns tracs for a specific object.
+    """
     content_type = ContentType.objects.get_for_model(type(obj))
     qs = Trac.objects.filter(content_type=content_type, object_id=obj.pk)
     if user:
@@ -72,7 +78,9 @@ def trac_get_tracs_for_object(obj, user=None, trac_type=None):
 
 
 def trac_get_tracs_for_user(user, trac_type=None):
-    """ Returns tracs for a specific user """
+    """
+    Returns tracs for a specific user.
+    """
 
     qs = Trac.objects.filter(user=user)
     if trac_type:
@@ -81,8 +89,9 @@ def trac_get_tracs_for_user(user, trac_type=None):
 
 
 def trac_get_trac_for_user(user, obj, trac_type):
-    """ Returns a specific trac of a specific type for a specific user """
-
+    """
+    Returns a specific trac of a specific type for a specific user.
+    """
     trac = None
     content_type = ContentType.objects.get_for_model(type(obj))
     try:
@@ -93,8 +102,9 @@ def trac_get_trac_for_user(user, obj, trac_type):
 
 
 def trac_get_or_create(user, obj, trac_type):
-    """ Get or create a trac """
-
+    """
+    Get or create a trac.
+    """
     trac = trac_get_trac_for_user(user, obj, trac_type)
     if trac is None:
         content_type = ContentType.objects.get_for_model(type(obj))
@@ -104,8 +114,9 @@ def trac_get_or_create(user, obj, trac_type):
 
 
 def trac_delete(user, obj, trac_type):
-    """ Delete a trac """
-
+    """
+    Delete a trac.
+    """
     trac = trac_get_trac_for_user(user, obj, trac_type)
     if trac is not None:
         trac.delete()
@@ -113,8 +124,9 @@ def trac_delete(user, obj, trac_type):
 
 
 def trac_get_stats_for_obj(obj):
-    """ Fill up the proper stat counts """
-
+    """
+    Fill up the proper stat counts.
+    """
     stat_dict = {}
     for ttype in defs.TRACWARE_TRAC_COUNTER_TYPES:
         stat_dict[ttype] = '-1'
