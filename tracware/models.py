@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import gettext as _
 
@@ -13,24 +13,24 @@ class Trac(models.Model):
     """
     Trac(k) objects for this user.
     """
-    TRACWARE_TYPE_LIKE = 1
-    TRACWARE_TYPE_STAR = 2
-    TRACWARE_TYPE_WATCH = 3
-    TRACWARE_TYPE_FOLLOW = 4
-    TRACWARE_TYPE_BOOKMARK = 5
+    TRACWARE_TYPE_LIKE = "Like"
+    TRACWARE_TYPE_STAR = "Star"
+    TRACWARE_TYPE_WATCH = "Watch"
+    TRACWARE_TYPE_FOLLOW = "Follow"
+    TRACWARE_TYPE_BOOKMARK = "Bookmark"
     TRACWARE_TYPE_OPTIONS = (
-        (TRACWARE_TYPE_LIKE, "Like"),
-        (TRACWARE_TYPE_STAR, "Star"),
-        (TRACWARE_TYPE_WATCH, "Watch"),
-        (TRACWARE_TYPE_FOLLOW, "Follow"),
-        (TRACWARE_TYPE_BOOKMARK, "Bookmark"),
+        (TRACWARE_TYPE_LIKE, TRACWARE_TYPE_LIKE),
+        (TRACWARE_TYPE_STAR, TRACWARE_TYPE_STAR),
+        (TRACWARE_TYPE_WATCH, TRACWARE_TYPE_WATCH),
+        (TRACWARE_TYPE_FOLLOW, TRACWARE_TYPE_FOLLOW),
+        (TRACWARE_TYPE_BOOKMARK, TRACWARE_TYPE_BOOKMARK),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(class)s")
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    content_object = GenericRelation('content_type', 'object_id')
-    trac_type = models.IntegerField(choices=TRACWARE_TYPE_OPTIONS)
+    content_object = GenericForeignKey('content_type', 'object_id')
+    trac_type = models.CharField(choices=TRACWARE_TYPE_OPTIONS, max_length=20)
 
     class Meta:
         verbose_name = _('trac')

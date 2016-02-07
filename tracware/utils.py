@@ -5,26 +5,6 @@ from .models import Trac
 from . import defaults as defs
 
 
-def trac_get_type_id_by_name(trac_type_name):
-    """
-    Returns a numeric version of a trac type.
-    """
-    for t in Trac.TRACWARE_TYPE_OPTIONS:
-        if trac_type_name.lower() == t[1].lower():
-            return t[0]
-    return 0
-
-
-def trac_get_type_name_by_id(trac_type_id):
-    """
-    Returns a string version of a trac type.
-    """
-    for t in Trac.TRACWARE_TYPE_OPTIONS:
-        if trac_type_id == t[0]:
-            return t[1]
-    return 'Unknown_Trac'
-
-
 def trac_get_cache_key(uid, oid, cid, tid):
     """
     Build a cache key for trac.
@@ -108,7 +88,7 @@ def trac_get_or_create(user, obj, trac_type):
     trac = trac_get_trac_for_user(user, obj, trac_type)
     if trac is None:
         content_type = ContentType.objects.get_for_model(type(obj))
-        trac = Trac(user=user, content_type=content_type, object_id=obj.pk, content_object=obj, trac_type=trac_type)
+        trac = Trac(user=user, content_type=content_type, object_id=obj.pk, trac_type=trac_type)
         trac.save()
     return trac
 
@@ -126,12 +106,24 @@ def trac_delete(user, obj, trac_type):
 def trac_get_stats_for_obj(obj):
     """
     Fill up the proper stat counts.
+    The objects needs to return the total count for each trac types they care about.
+    Example. Object A() should have a method called likes that returns the total likes
+    Or an int attribute `likes` that has the total count.
     """
     stat_dict = {}
     for ttype in defs.TRACWARE_TRAC_COUNTER_TYPES:
         stat_dict[ttype] = '-1'
-        if hasattr(obj, ttype):
-            stat_dict[ttype] = obj.__dict__[ttype]
+        attr_or_func = getattr(obj, ttype, None)
+        if attr_or_func:
+            if isinstance(attr_or_func, int):
+                stat_dict[ttype] = attr_or_func  # @property method
+            elif callable(attr_or_func):
+                stat_dict[ttype] = attr_or_func()  # normal method
+            else:
+                try:
+                    stat_dict[ttype] = obj.__dict__[ttype]  # attribute
+                except KeyError:
+                    pass
     return stat_dict
 
 

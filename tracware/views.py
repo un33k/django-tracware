@@ -41,10 +41,12 @@ class TracToggleAjaxView(LoginRequiredMixin, CsrfProtectMixin, TemplateView):
         messages.add_message(self.request, messages.WARNING, _("Invalid request. Method Not Allowed."))
         return HttpResponseNotAllowed(_('Method Not Allowed'))
 
-    def invalid_operation(self):
+    def invalid_operation(self, message=None):
+        if not message:
+            message = _('Invalid Operation. Missing directives.')
         json_data = {
             'status': 'failure',
-            'msg': 'Invalid Operation. Missing directives.',
+            'message': message,
             'state': defs.TRACWARE_STATUS_INIT,
         }
         return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -63,33 +65,36 @@ class TracToggleAjaxView(LoginRequiredMixin, CsrfProtectMixin, TemplateView):
         trac_obj = None
 
         try:
-
             pk = request.POST['trac-oid']
             app = request.POST['trac-app']
             ttype = request.POST['trac-type']
             klass = request.POST['trac-class']
             state = request.POST['trac-state']
-            model = apps.get_model(app, klass)
-            trac_type = trac_get_type_id_by_name(ttype)
-        except:
+        except KeyError:
             return self.invalid_operation()
-
+        try:
+            model = apps.get_model(app, klass)
+        except ValueError:
+            message = _("Model must be of the form 'app_label.model_name'")
+            return self.invalid_operation(message)
+        except LookupError:
+            message = _("You must supply a valid app label and module name. Got '{}.{}'".format(app, klass))
+            return self.invalid_operation(message)
         else:
-
             obj = get_object_or_404(model, id=pk)
             json_data['state'] = state
             if state == defs.TRACWARE_STATUS_INIT:
-                if trac_exists(self.request.user, obj, trac_type):
+                if util.trac_exists(self.request.user, obj, ttype):
                     json_data['state'] = defs.TRACWARE_STATUS_ON
                 else:
                     json_data['state'] = defs.TRACWARE_STATUS_OFF
             elif state == defs.TRACWARE_STATUS_OFF:
-                trac_obj = trac_get_or_create(self.request.user, obj, trac_type)
+                trac_obj = util.trac_get_or_create(self.request.user, obj, ttype)
                 if trac_obj:
                     signals.trac_created.send(sender=Trac, request=self.request, trac=trac_obj)
                     json_data['state'] = defs.TRACWARE_STATUS_ON
             elif state == defs.TRACWARE_STATUS_ON:
-                trac_obj = trac_delete(self.request.user, obj, trac_type)
+                trac_obj = util.trac_delete(self.request.user, obj, ttype)
                 if trac_obj:
                     signals.trac_deleted.send(sender=Trac, request=self.request, trac=trac_obj)
                 json_data['state'] = defs.TRACWARE_STATUS_OFF
@@ -97,6 +102,5 @@ class TracToggleAjaxView(LoginRequiredMixin, CsrfProtectMixin, TemplateView):
                 self.invalid_operation()
             if trac_obj:
                 obj = get_object_or_404(model, id=pk)  # updated copy
-            json_data['trac_stats_tracked_obj'] = trac_get_stats_for_obj(obj)
-            json_data['trac_stats_tracker_obj'] = trac_get_stats_for_obj(self.request.user.profile)
+            json_data['trac_stats_tracked_obj'] = util.trac_get_stats_for_obj(obj)
         return HttpResponse(json.dumps(json_data), content_type="application/json")
