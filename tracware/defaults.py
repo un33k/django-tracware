@@ -7,7 +7,7 @@ TRACWARE_STATUS_INIT = 'TICK_INIT'
 TRACWARE_STATUS_OFF = 'TICK_OFF'
 TRACWARE_STATUS_ON = 'TICK_ON'
 
-TRACWARE_TRAC_COUNTER_TYPES = [
+TRACWARE_TRAC_COUNTER_TYPES = getattr(settings, 'TRACWARE_TRAC_COUNTER_TYPES', [
     'likes',        # others like an object
     'liked',        # an object likes others
     'stars',        # others star and object
@@ -18,4 +18,4 @@ TRACWARE_TRAC_COUNTER_TYPES = [
     'following',    # an object follows others
     'bookmarks',    # others bookmark an object
     'bookmarked',   # an object bookmarks others
-]
+])
