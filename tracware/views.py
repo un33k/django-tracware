@@ -102,5 +102,5 @@ class TracToggleAjaxView(LoginRequiredMixin, CsrfProtectMixin, TemplateView):
                 self.invalid_operation()
             if trac_obj:
                 obj = get_object_or_404(model, id=pk)  # updated copy
-            json_data['trac_stats_tracked_obj'] = util.trac_get_stats_for_obj(obj)
+            json_data['counters'] = util.trac_get_stats_for_obj(obj)
         return HttpResponse(json.dumps(json_data), content_type="application/json")
